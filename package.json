@@ -1,0 +1,44 @@
+{
+  "name": "create-next-example-app",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.2.0",
+    "@material-ui/styles": "^4.2.0",
+    "@zeit/next-css": "^1.0.1",
+    "date-fns": "^2.0.0-alpha.27",
+    "isomorphic-unfetch": "^3.0.0",
+    "jss": "^9.8.7",
+    "lodash": "^4.17.11",
+    "next": "^9.0.1",
+    "next-fonts": "^0.18.0",
+    "prop-types": "^15.7.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-jss": "^8.1.0",
+    "react-redux": "^7.0.2",
+    "redux": "^4.0.1",
+    "redux-devtools-extension": "^2.13.8",
+    "redux-thunk": "^2.3.0",
+    "styled-jsx": "^3.2.1",
+    "typeface-roboto": "^0.0.75"
+  },
+  "devDependencies": {
+    "@types/node": "^12.6.2",
+    "babel-eslint": "^10.0.2",
+    "eslint": "^6.0.1",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-html": "^6.0.0",
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.14.2",
+    "eslint-plugin-react-hooks": "^2.0.1",
+    "prettier": "^1.16.4",
+    "typescript": "^3.5.3",
+    "webpack": "^4.35.3"
+  }
+}
