@@ -76,42 +76,52 @@ function Timetable(props) {
 
   return (
     <Layout title="Departures">
-      <div className={styles.departures}>
+      <Grid container direction="column" className={styles.departures}>
         <Typography variant="h1" className={styles.title}>
           {from}-{to}
         </Typography>
-        <div>
-          Sort by:
-          <Button type="button" onClick={() => setSort('arrival')}>
-            Arrival
-          </Button>
-          <Button type="button" onClick={() => setSort('departure')}>
-            Departure
-          </Button>
-        </div>
-        {getSortedDepartures(from, to, data, sort).map(train => {
-          const [departure, arrival] = train.timeTableRows.filter(
-            row =>
-              (row.type === 'DEPARTURE' && row.stationShortCode === from) ||
-              (row.type === 'ARRIVAL' && row.stationShortCode === to),
-          );
-          return (
-            <Grid
-              item
-              xs={12}
-              sm={6}
-              key={train.trainNumber}
-              className={styles.departure}
-            >
-              <Departure
-                train={train}
-                departure={departure}
-                arrival={arrival}
-              />
-            </Grid>
-          );
-        })}
-      </div>
+        <Grid item container direction="column" alignItems="center">
+          <Grid
+            item
+            container
+            direction="row"
+            justify="center"
+            alignItems="center"
+          >
+            Sort by:
+            <Button type="button" onClick={() => setSort('arrival')}>
+              Arrival
+            </Button>
+            <Button type="button" onClick={() => setSort('departure')}>
+              Departure
+            </Button>
+          </Grid>
+        </Grid>
+        <Grid item container direction="column" alignItems="center" spacing={2}>
+          {getSortedDepartures(from, to, data, sort).map(train => {
+            const [departure, arrival] = train.timeTableRows.filter(
+              row =>
+                (row.type === 'DEPARTURE' && row.stationShortCode === from) ||
+                (row.type === 'ARRIVAL' && row.stationShortCode === to),
+            );
+            return (
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                key={train.trainNumber}
+                className={styles.departure}
+              >
+                <Departure
+                  train={train}
+                  departure={departure}
+                  arrival={arrival}
+                />
+              </Grid>
+            );
+          })}
+        </Grid>
+      </Grid>
     </Layout>
   );
 }
