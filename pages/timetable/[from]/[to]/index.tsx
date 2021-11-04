@@ -24,6 +24,7 @@ const Timetable = () => {
   const [sort, setSort] = useState("departure");
 
   const { data, error } = useSWR(`/api/departures/${from}/${to}?sort=${sort || "departure"}`);
+  if (error) console.log(error);
 
   const fromStationName = allStations.find((s) => s.code === from)?.name;
   const toStationName = allStations.find((s) => s.code === to)?.name;
