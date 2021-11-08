@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { Typography, Button, Grid } from "@mui/material";
-import Departure from "../../../../src/components/departure";
+import { Typography, Button, Grid, IconButton } from "@mui/material";
+import Departure from "../../../../src/components/Departure";
 import { allStations } from "../../../../src/stations";
 import useSWR from "swr";
 import { useRouter } from "next/router";
-import { TimeTableRow, Train } from "../../../../src/train";
+import { TimeTableRow, Train } from "../../../../src/types";
 import { useLocalStorage } from "../../../../src/useLocalStorage";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
+import StarIcon from "@mui/icons-material/Star";
 
 const addToRecents = (from: string, to: string, recents: any[], setRecents: (v: any) => void) => {
   if (!from || !to) return;
@@ -18,8 +20,21 @@ const Timetable = () => {
   const router = useRouter();
   const { from, to } = router.query;
 
-  const [recents, setRecents] = useLocalStorage("recents", []);
+  const [recents, setRecents] = useLocalStorage<string[]>("recents", []);
   addToRecents(from as string, to as string, recents, setRecents);
+
+  const [favorites, setFavorites] = useLocalStorage<string[]>("favorites", []);
+  const isFavorite = favorites.includes(`${from}-${to}`);
+  const toggleFavorite = (from: string, to: string) => {
+    const value = [from, to].join("-");
+    if (favorites.includes(value)) {
+      // remove
+      setFavorites(favorites.filter((f) => f !== value));
+    } else {
+      // add
+      setFavorites([value, ...favorites]);
+    }
+  };
 
   const [sort, setSort] = useState("departure");
 
@@ -31,9 +46,18 @@ const Timetable = () => {
   return (
     <>
       <Grid container direction="column" justifyContent="center" alignItems="center">
-        <Typography variant="h2">
-          {fromStationName} - {toStationName}
-        </Typography>
+        <Grid item container direction="row" justifyContent="center" alignItems="center">
+          <Grid item>
+            <Typography variant="h2">
+              {fromStationName} - {toStationName}
+            </Typography>
+          </Grid>
+          <Grid item>
+            <IconButton onClick={() => toggleFavorite(from as string, to as string)}>
+              {isFavorite ? <StarIcon /> : <StarBorderIcon />}
+            </IconButton>
+          </Grid>
+        </Grid>
         <Grid item container direction="column" alignItems="center">
           <Grid item container direction="row" justifyContent="center" alignItems="center">
             Sort by:

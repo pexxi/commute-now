@@ -1,3 +1,10 @@
+export interface DeparturesAPIResponseItem {
+  train: Train;
+  departure: TimeTableRow;
+  arrival: TimeTableRow;
+}
+export type DeparturesAPIResponse = DeparturesAPIResponseItem[];
+
 export interface Train {
   trainNumber: number;
   departureDate: string;

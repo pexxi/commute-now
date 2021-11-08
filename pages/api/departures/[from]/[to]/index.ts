@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import qs from "query-string";
 import sortBy from "lodash/sortBy";
-import { TimeTableRow, Train } from "../../../../../src/train";
+import { TimeTableRow, Train } from "../../../../../src/types";
 
 export interface ResponseItem {
   train: Train;

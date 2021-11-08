@@ -1,8 +1,13 @@
-import { createTheme } from "@mui/material/styles";
+import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 import { red } from "@mui/material/colors";
 
 // Create a theme instance.
-const theme = createTheme({
+let theme = createTheme({
+  typography: {
+    // In Chinese and Japanese the characters are usually larger,
+    // so a smaller fontsize may be appropriate.
+    fontSize: 12,
+  },
   palette: {
     primary: {
       main: "#556cd6",
@@ -15,5 +20,6 @@ const theme = createTheme({
     },
   },
 });
+theme = responsiveFontSizes(theme);
 
 export default theme;

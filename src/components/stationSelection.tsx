@@ -8,7 +8,7 @@ interface Option {
   label: string;
 }
 
-const StationSelection = () => {
+export default function StationSelection() {
   const router = useRouter();
   const [from, setFrom] = useState<Option | null>(null);
   const options = allStations.map((s) => ({ label: s.name, id: s.code }));
@@ -22,7 +22,10 @@ const StationSelection = () => {
 
   return (
     <Grid container>
-      <Grid item xs={6}>
+      <Grid item xs={12}>
+        <p>Search timetables:</p>
+      </Grid>
+      <Grid item md={6} xs={12}>
         <Autocomplete
           options={options}
           renderInput={(params) => <TextField {...params} label="Departure" />}
@@ -31,7 +34,7 @@ const StationSelection = () => {
           isOptionEqualToValue={(o: Option, v: Option) => o.id === v.id}
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item md={6} xs={12}>
         <Autocomplete
           options={destinations}
           renderInput={(params) => <TextField {...params} label="Destination" />}
@@ -44,6 +47,4 @@ const StationSelection = () => {
       </Grid>
     </Grid>
   );
-};
-
-export default StationSelection;
+}

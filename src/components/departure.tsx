@@ -2,7 +2,7 @@ import { Card, Typography, Grid, Box } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { format } from "date-fns";
 import fi from "date-fns/locale/fi";
-import { TimeTableRow, Train } from "../train";
+import { TimeTableRow, Train } from "../types";
 
 interface Props {
   train: Train;

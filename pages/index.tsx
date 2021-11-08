@@ -1,40 +1,34 @@
-import { Typography } from "@mui/material";
+import { Grid, IconButton, Typography } from "@mui/material";
 import Link from "../src/components/Link";
 import { stationName } from "../src/stations";
-// import useSWR from "swr";
-import { useLocalStorage } from "../src/useLocalStorage";
-import StationSelection from "../src/components/stationSelection";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
+import StarIcon from "@mui/icons-material/Star";
 
-// const defaultFavorites = [
-//   { from: "LPV", to: "HKI" },
-//   { from: "HKI", to: "LPV" },
-// ];
+import { useLocalStorage } from "../src/useLocalStorage";
+import StationSelection from "../src/components/StationSelection";
+import FrontpageFavorite from "../src/components/FrontpageFavorite";
+
+const defaultFavorites = ["LPV-HKI", "HKI-LPV"];
 
 export default function Index() {
-  // const [favorites] = useLocalStorage("favorites", defaultFavorites);
+  const [favorites, setFavorites] = useLocalStorage("favorites", defaultFavorites);
   const [recents] = useLocalStorage("recents", []);
 
-  // const { data, error } = useSWR("/api/departures/lpv/hki");
+  const renderFavorites = () => {
+    if (favorites.length === 0) return;
+    return (
+      <>
+        <Typography variant="h3">Favorites</Typography>
 
-  // const renderFavorites = () => {
-  //   if (favorites.length === 0) return;
-  //   return (
-  //     <>
-  //       <Typography variant="h3">Favorites</Typography>
-
-  //       {favorites.map((fav: any, i) => (
-  //         <div className="row" key={`fav-${i}`}>
-  //           <Link href={`/timetable/${fav.from}/${fav.to}`}>
-  //             <Typography variant="h3">
-  //               {stationName(fav.from)} &rarr; {stationName(fav.to)}
-  //             </Typography>
-  //           </Link>
-  //           <p>Next: Train A xx:xx:xx, track 4</p>
-  //         </div>
-  //       ))}
-  //     </>
-  //   );
-  // };
+        {favorites.map((fav: string, i) => {
+          const [from, to] = fav.split("-");
+          if (from && to) {
+            return <FrontpageFavorite from={from} to={to} key={`fav-${i}`} />;
+          }
+        })}
+      </>
+    );
+  };
 
   const renderRecents = () => {
     if (recents.length === 0) return;
@@ -45,18 +39,39 @@ export default function Index() {
         {recents.map((recent: string, i) => {
           const [from, to] = recent.split("-");
           if (!from || !to) return;
+          const isFavorite = favorites.includes(recent);
           return (
-            <div className="row" key={`recent-${i}`}>
-              <Link href={`/timetable/${from}/${to}`}>
-                <Typography variant="h4">
-                  {stationName(from)} &rarr; {stationName(to)}
-                </Typography>
-              </Link>
-            </div>
+            <Grid container direction="row" key={`recent-${i}`}>
+              <Grid item>
+                <Link href={`/timetable/${from}/${to}`}>
+                  <Typography variant="h4">
+                    {stationName(from)} &rarr; {stationName(to)}
+                  </Typography>
+                </Link>
+              </Grid>
+              <Grid item>
+                <IconButton onClick={() => toggleFavorite(from, to)}>
+                  {isFavorite ? <StarIcon /> : <StarBorderIcon />}
+                </IconButton>
+              </Grid>
+            </Grid>
           );
         })}
       </>
     );
+  };
+
+  const toggleFavorite = (from: string, to: string) => {
+    const value = [from, to].join("-");
+    if (favorites.includes(value)) {
+      // remove
+      const newFavorites = favorites.filter((f) => f !== value);
+      setFavorites(newFavorites);
+    } else {
+      // add
+      const newFavorites = [value, ...favorites];
+      setFavorites(newFavorites);
+    }
   };
 
   return (
@@ -65,9 +80,14 @@ export default function Index() {
 
       <StationSelection />
 
-      {/* {renderFavorites()} */}
-
-      {renderRecents()}
+      <Grid container>
+        <Grid item md={6} xs={12}>
+          {renderFavorites()}
+        </Grid>
+        <Grid item md={6} xs={12}>
+          {renderRecents()}
+        </Grid>
+      </Grid>
     </>
   );
 }

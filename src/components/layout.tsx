@@ -1,7 +1,7 @@
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
-import Head from "./head";
-import Nav from "./nav";
+import Head from "./Head";
+import Nav from "./Nav";
 
 const Layout = ({ children, title = "" }: any) => (
   <>
