@@ -14,12 +14,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const url = qs.stringifyUrl({
-      url: `https://rata.digitraffic.fi/api/v1/live-trains/station/${from}`,
+      url: `https://rata.digitraffic.fi/api/v1/live-trains/station/${from}/${to}`,
       query: {
-        minutes_before_departure: 45,
-        minutes_after_departure: 2,
-        minutes_before_arrival: 0,
-        minutes_after_arrival: 0,
+        limit: 100,
+        include_nonstopping: false,
       },
     });
 
@@ -29,12 +27,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const departures: ResponseItem[] = [];
 
     data
-      .filter(
-        ({ trainCategory, timeTableRows }: Train) =>
-          trainCategory === "Commuter" &&
-          timeTableRows.filter(({ type, stationShortCode }: any) => type === "ARRIVAL" && stationShortCode === to)
-            .length === 1,
-      )
+      // .filter(
+      //   ({ trainCategory, timeTableRows }: Train) =>
+      //     trainCategory === "Commuter" &&
+      //     timeTableRows.filter(
+      //       ({ type, stationShortCode, trainStopping }: TimeTableRow) =>
+      //         type === "ARRIVAL" && stationShortCode === to && trainStopping,
+      //     ).length === 1,
+      // )
       .forEach((train: Train) => {
         const [departure, arrival] = train.timeTableRows.filter(
           (row: TimeTableRow) =>
