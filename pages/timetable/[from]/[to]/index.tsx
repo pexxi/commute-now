@@ -8,12 +8,13 @@ import { TimeTableRow, Train } from "../../../../src/types";
 import { useLocalStorage } from "../../../../src/useLocalStorage";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";
+import Head from "../../../../src/components/Head";
 
 const addToRecents = (from: string, to: string, recents: any[], setRecents: (v: any) => void) => {
   if (!from || !to) return;
   const value = `${from}-${to}`;
   if (recents.includes(value)) return;
-  setRecents([value, ...recents]);
+  setRecents([value, ...recents].slice(0, 5));
 };
 
 const Timetable = () => {
@@ -38,28 +39,23 @@ const Timetable = () => {
 
   const [sort, setSort] = useState("departure");
 
-  const { data, error } = useSWR(`/api/departures/${from}/${to}?sort=${sort || "departure"}`);
+  const { data, error } = useSWR(() =>
+    !!from && !!to ? `/api/departures/${from}/${to}?sort=${sort || "departure"}` : null,
+  );
   if (error) console.log(error);
 
   const fromStationName = allStations.find((s) => s.code === from)?.name;
   const toStationName = allStations.find((s) => s.code === to)?.name;
+  const title = `${fromStationName}-${toStationName}`;
   return (
     <>
+      <Head title={title}></Head>
       <Grid container direction="column" justifyContent="center" alignItems="center">
+        <Grid item>
+          <Typography variant="h2">{title}</Typography>
+        </Grid>
         <Grid item container direction="row" justifyContent="center" alignItems="center">
           <Grid item>
-            <Typography variant="h2">
-              {fromStationName} - {toStationName}
-            </Typography>
-          </Grid>
-          <Grid item>
-            <IconButton onClick={() => toggleFavorite(from as string, to as string)}>
-              {isFavorite ? <StarIcon /> : <StarBorderIcon />}
-            </IconButton>
-          </Grid>
-        </Grid>
-        <Grid item container direction="column" alignItems="center">
-          <Grid item container direction="row" justifyContent="center" alignItems="center">
             Sort by:
             <Button type="button" onClick={() => setSort("arrival")}>
               Arrival
@@ -68,17 +64,22 @@ const Timetable = () => {
               Departure
             </Button>
           </Grid>
+          <Grid item justifyContent="center" alignItems="center">
+            <Button
+              variant="outlined"
+              startIcon={isFavorite ? <StarIcon /> : <StarBorderIcon />}
+              onClick={() => toggleFavorite(from as string, to as string)}
+            >
+              {isFavorite ? "Remove favorite" : "Add favorite"}
+            </Button>
+          </Grid>
         </Grid>
-        <Grid item container direction="column" alignItems="center" spacing={2}>
-          {(data || []).map(
-            ({ train, departure, arrival }: { train: Train; departure: TimeTableRow; arrival: TimeTableRow }) => {
-              return (
-                <Grid item xs={12} sm={6} key={train.trainNumber}>
-                  <Departure train={train} departure={departure} arrival={arrival} />
-                </Grid>
-              );
-            },
-          )}
+        <Grid item direction="column" alignItems="center" spacing={2}>
+          {(data || [])
+            .slice(0, 5)
+            .map(({ train, departure, arrival }: { train: Train; departure: TimeTableRow; arrival: TimeTableRow }) => {
+              return <Departure train={train} departure={departure} arrival={arrival} key={train.trainNumber} />;
+            })}
         </Grid>
       </Grid>
     </>
