@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Typography, Button, Grid } from "@mui/material";
-import Departure from "../../../../src/components/Departure2";
+import Departure from "../../../../src/components/Departure";
 import { allStations } from "../../../../src/stations";
 import useSWR from "swr";
 import { useRouter } from "next/router";
@@ -8,7 +8,7 @@ import { TimeTableRow, Train } from "../../../../src/types";
 import { useLocalStorage } from "../../../../src/useLocalStorage";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";
-import Head from "../../../../src/components/Head2";
+import Head from "../../../../src/components/Head";
 
 const addToRecents = (from: string, to: string, recents: any[], setRecents: (v: any) => void) => {
   if (!from || !to) return;

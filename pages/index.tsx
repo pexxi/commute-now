@@ -5,7 +5,7 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";
 
 import { useLocalStorage } from "../src/useLocalStorage";
-import StationSelection from "../src/components/StationSelection2";
+import StationSelection from "../src/components/StationSelection";
 import FrontpageFavorite from "../src/components/FrontpageFavorite";
 
 const defaultFavorites = ["LPV-HKI", "HKI-LPV"];
